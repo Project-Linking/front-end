@@ -1,6 +1,11 @@
 <template>
   <v-app>
     <navigation-bar></navigation-bar>
+    <v-main>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
   </v-app>
 </template>
 
