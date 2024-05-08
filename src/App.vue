@@ -6,13 +6,15 @@
         <router-view></router-view>
       </v-container>
     </v-main>
+    <bottom-navigation-bar></bottom-navigation-bar>
   </v-app>
 </template>
 
 <script>
-import NavigationBar from "./components/NavigationBar.vue";
+import NavigationBar from "./components/global/NavigationBar.vue";
+import BottomNavigationBar from "./components/global/BottomNavigationBar.vue";
 export default {
-  components: { NavigationBar },
+  components: { NavigationBar, BottomNavigationBar },
   name: "App",
 };
 </script>
