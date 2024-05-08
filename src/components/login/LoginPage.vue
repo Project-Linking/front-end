@@ -23,13 +23,13 @@
       class="social-img"
       width="50%"
       :src="require('/src/assets/kakaoLoginBtn.png')"
-      @click="kakaoLogin"
+      @click="getKakaoAuthToken"
     />
     <v-img
       class="social-img"
       width="50%"
       :src="require('/src/assets/naverLoginBtn.png')"
-      href=""
+      @click="getNaverAuthToken"
     />
   </v-container>
 </template>
@@ -44,9 +44,13 @@ export default {
     };
   },
   methods: {
-    kakaoLogin() {
+    getKakaoAuthToken() {
       window.location.href =
         "https://kauth.kakao.com/oauth/authorize?client_id=6314c5389173bd107cdaf1388b101fb2&redirect_uri=http://localhost:3000/auth/kakao&response_type=code";
+    },
+    getNaverAuthToken() {
+      const state = encodeURI(crypto.randomUUID());
+      window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=zX2i9dfPmFNew0ETZDRM&redirect_uri=http://localhost:3000/auth/naver&state=${state}`;
     },
   },
 };
