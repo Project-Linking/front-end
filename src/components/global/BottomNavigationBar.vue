@@ -1,22 +1,23 @@
 <template>
-  <v-layout class="overflow-visible" style="height: 56px">
-    <v-bottom-navigation color="blue" grow fixed>
-      <v-btn>
-        <v-icon>mdi-account-group-outline</v-icon>
+  <v-bottom-navigation v-model="value" active grow>
+    <v-btn>
+      <v-icon>mdi-account-group-outline</v-icon>
+      <span>Group</span>
+    </v-btn>
 
-        <span>Group</span>
-      </v-btn>
+    <v-btn to="/">
+      <v-icon>mdi-home-variant-outline</v-icon>
+      <span>Home</span>
+    </v-btn>
 
-      <v-btn>
-        <v-icon>mdi-home-variant-outline</v-icon>
-        <span>Home</span>
-      </v-btn>
-
-      <v-btn>
-        <v-icon>mdi-forum-outline</v-icon>
-
-        <span>Chat</span>
-      </v-btn>
-    </v-bottom-navigation>
-  </v-layout>
+    <v-btn>
+      <v-icon>mdi-forum-outline</v-icon>
+      <span>Chat</span>
+    </v-btn>
+  </v-bottom-navigation>
 </template>
+<script>
+export default {
+  data: () => ({ value: 0 }),
+};
+</script>
