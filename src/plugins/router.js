@@ -2,21 +2,25 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "@/components/login/LoginPage.vue";
 import MainHome from "@/components/MainHome.vue";
 import WaitingPage from "@/components/login/WaitingPage.vue";
+import SignupPage from "@/components/login/SignupPage.vue";
 
 const routes = [
   {
+    path: "/signup",
+    name: "SignupPage",
+    component: SignupPage,
+  },
+  {
     path: "/",
-    name: MainHome,
+    name: "MainHome",
     component: MainHome,
   },
   {
     path: "/login",
-    name: "LoginPage",
     component: LoginPage,
   },
   {
     path: "/auth/:providerName",
-    name: "WaitingPage",
     component: WaitingPage,
   },
 ];

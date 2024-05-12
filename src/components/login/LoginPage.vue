@@ -2,23 +2,40 @@
   <div class="login-title">
     <span>Login</span>
   </div>
-  <v-form @submit.prevent>
-    <v-container class="input-box">
-      <v-text-field
-        label="ID"
-        variant="outlined"
-        :rules="[rules.required]"
-      ></v-text-field>
-      <v-text-field
-        label="Password"
-        variant="outlined"
-        :rules="[rules.required]"
-      ></v-text-field>
-      <v-btn class="mt-2 submit-btn" type="submit" block>Submit</v-btn>
-    </v-container>
-  </v-form>
+  <v-container class="input-box">
+    <v-text-field
+      label="ID"
+      variant="outlined"
+      :rules="[rules.required]"
+      v-model="loginId"
+    ></v-text-field>
+    <v-text-field
+      label="Password"
+      variant="outlined"
+      :rules="[rules.required]"
+      v-model="password"
+      type="password"
+    ></v-text-field>
+
+    <v-alert
+      v-if="modal"
+      closable
+      @click="setModal"
+      icon="mdi-alert-circle"
+      title="입력을 확인해주세요!"
+      :text="errorMessage"
+      variant="outlined"
+    ></v-alert>
+
+    <v-btn @click="defaultLogin" class="mt-2 submit-btn" type="submit" block
+      >Submit</v-btn
+    >
+  </v-container>
   <v-container>
-    <v-btn width="50%" prepend-icon="mdi-account-arrow-right"> SignUp</v-btn>
+    <v-btn to="/signup" width="50%" prepend-icon="mdi-account-arrow-right">
+      SignUp</v-btn
+    >
+
     <v-img
       class="social-img"
       width="50%"
@@ -35,15 +52,22 @@
 </template>
 
 <script>
+import * as login from "@/api/login";
+import { mapActions } from "pinia";
+import { useAuthStore } from "@/store/useAuthStore";
 export default {
   data() {
     return {
       rules: {
         required: (value) => !!value || "Field is required",
       },
+      loginId: "",
+      password: "",
+      modal: false,
     };
   },
   methods: {
+    ...mapActions(useAuthStore, ["saveAuth"]),
     getKakaoAuthToken() {
       window.location.href =
         "https://kauth.kakao.com/oauth/authorize?client_id=6314c5389173bd107cdaf1388b101fb2&redirect_uri=http://localhost:3000/auth/kakao&response_type=code";
@@ -51,6 +75,22 @@ export default {
     getNaverAuthToken() {
       const state = encodeURI(crypto.randomUUID());
       window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=zX2i9dfPmFNew0ETZDRM&redirect_uri=http://localhost:3000/auth/naver&state=${state}`;
+    },
+    defaultLogin() {
+      login
+        .defaultLogin(this.loginId, this.password)
+        .then((res) => {
+          const data = res.data.data;
+          this.saveAuth(data.accessToken, data.nickname, "");
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          this.res = err.response.data;
+          if (this.modal !== true) {
+            this.modal = !this.modal;
+          }
+          this.errorMessage = this.res.errorStatus.description;
+        });
     },
   },
 };
