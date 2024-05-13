@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import * as login from "@/api/login";
+import * as auth from "@/api/auth";
 import { mapActions } from "pinia";
 import { useAuthStore } from "@/store/useAuthStore";
 export default {
@@ -23,10 +23,9 @@ export default {
   },
   created() {
     this.code = this.$route.query.code;
-    this.state = this.$route.query.state;
     this.providerName = this.$route.path.slice(6);
-    login.socialLogin(this.code, this.providerName, this.state).then((res) => {
-      const data = res.data.data;
+    auth.socialLogin(this.code, this.providerName).then((res) => {
+      const data = res.data;
       this.saveAuth(data.userToken.accessToken, data.nickname, data.imgUri);
       this.$router.push("/");
     });

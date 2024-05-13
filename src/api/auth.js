@@ -1,9 +1,9 @@
 import http from "@/api/http";
+import authHttp from "@/api/authHttp";
 
-async function socialLogin(code, providerName, stateCode) {
+async function socialLogin(code, providerName) {
   return http.post(`/login/${providerName}`, {
     authorizationCode: code,
-    stateCode: stateCode,
   });
 }
 
@@ -22,4 +22,8 @@ async function defaultLogin(id, pw) {
   });
 }
 
-export { socialLogin, signup, defaultLogin };
+async function logout() {
+  return authHttp.get("/logout");
+}
+
+export { socialLogin, signup, defaultLogin, logout };

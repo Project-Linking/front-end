@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import * as login from "@/api/login";
+import * as auth from "@/api/auth";
 import { mapActions } from "pinia";
 import { useAuthStore } from "@/store/useAuthStore";
 export default {
@@ -77,11 +77,11 @@ export default {
       window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=zX2i9dfPmFNew0ETZDRM&redirect_uri=http://localhost:3000/auth/naver&state=${state}`;
     },
     defaultLogin() {
-      login
+      auth
         .defaultLogin(this.loginId, this.password)
         .then((res) => {
-          const data = res.data.data;
-          this.saveAuth(data.accessToken, data.nickname, "");
+          const data = res.data;
+          this.saveAuth(data.userToken.accessToken, data.nickname, "");
           this.$router.push("/");
         })
         .catch((err) => {

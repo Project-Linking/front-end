@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import * as login from "@/api/login";
+import * as login from "@/api/auth";
 import { mapActions } from "pinia";
 import { useAuthStore } from "@/store/useAuthStore";
 export default {

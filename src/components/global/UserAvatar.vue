@@ -19,7 +19,9 @@
           <v-divider class="my-3"></v-divider>
           <v-btn variant="text" rounded> 내 정보 </v-btn>
           <v-divider class="my-3"></v-divider>
-          <v-btn variant="text" rounded> 로그아웃 </v-btn>
+          <v-btn variant="text" rounded> 알림 </v-btn>
+          <v-divider class="my-3"></v-divider>
+          <v-btn variant="text" rounded @click="logout"> 로그아웃 </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -27,11 +29,20 @@
 </template>
 
 <script>
+import * as auth from "@/api/auth";
+import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "@/store/useAuthStore";
-import { mapState } from "pinia";
 export default {
   computed: {
     ...mapState(useAuthStore, ["isLoggedIn", "imgUri", "nickname"]),
+  },
+  methods: {
+    logout() {
+      auth.logout().then(() => {
+        this.deleteAuth();
+      });
+    },
+    ...mapActions(useAuthStore, ["deleteAuth"]),
   },
 };
 </script>
