@@ -27,21 +27,41 @@
                     </v-col>
                     <v-col cols="auto">
                         <!-- 즐겨찾기 -->
-                        <v-btn flat size="mid" @click="toogleFavorite" class="mr-4">
+                        <v-btn flat size="mid" @click.stop="toogleFavorite" class="mr-4">
                             <v-icon :color="isFavorite ? 'yellow' : ''">
                                 {{ isFavorite ? 'mdi-star' : 'mdi-star-outline' }}
                             </v-icon>
                         </v-btn>
 
-                        <v-btn variant="text" color="primary" @click="dialog = true"> 지원하기 </v-btn>
+                        <v-btn variant="text" color="primary" @click.stop="dialog = true"> 지원하기 </v-btn>
                         <!-- 지원하기 다이어로그 -->
-                        <v-dialog persistent v-model="dialog" width="auto">
-                            <v-card max-width="400" text="정말 지원 하시겠습니까?.">
+                        <v-dialog persistent v-model="dialog" max-width="500">
+                            <v-card max-width="400">
+                                <v-card-text v-if="!loading">정말 지원하시겠습니까?</v-card-text>
+                                <div v-else align="center" class="mt-9">
+                                    <v-progress-circular
+                                        color="primary"
+                                        indeterminate="disable-shrink"
+                                        size="50"
+                                        width="2"
+                                    ></v-progress-circular>
+                                </div>
+
                                 <template v-slot:actions>
-                                    <v-btn class="ms-auto" text="Ok" @click="dialog = false" color="primary"></v-btn>
-                                    <v-btn text="Close" @click="dialog = false" color="red-accent-4"></v-btn>
+                                    <v-btn
+                                        v-if="!loading"
+                                        class="ms-auto"
+                                        text="Ok"
+                                        @click="onSubmit"
+                                        color="primary"
+                                    ></v-btn>
+                                    <v-btn
+                                        v-if="!loading"
+                                        text="Close"
+                                        @click="dialog = false"
+                                        color="red-accent-4"
+                                    ></v-btn>
                                 </template>
-                                
                             </v-card>
                         </v-dialog>
                     </v-col>
@@ -64,6 +84,7 @@ export default {
             comment: 123,
             languages: ['Java', 'Spring', 'React', 'HTML'],
             dialog: false,
+            loading: false,
         };
     },
     methods: {
@@ -71,13 +92,21 @@ export default {
             this.isFavorite = !this.isFavorite;
         },
         onClickPost() {
-            console.log('click!!');
+            this.$router.push('/post');
+        },
+        onSubmit() {
+            this.loading = true;
+            setTimeout(() => {
+                this.loading = false;
+                this.dialog = false;
+            }, 3000);
         },
     },
     watch: {
         dialog(val) {
-            if (!val) return;
-            setTimeout(() => ((this.dialog = false), 3000));
+            if (!val) {
+                this.loading = false; // Reset loading when dialog closes
+            }
         },
     },
 };

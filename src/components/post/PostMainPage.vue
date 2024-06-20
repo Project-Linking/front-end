@@ -1,15 +1,15 @@
 <template>
     <PostHeader />
 
-    <PostCreatePage v-for="i in 10" :key="i" />
+    <PostCard v-for="i in 10" :key="i" />
 </template>
 
 <script>
-import PostCreatePage from './PostCreatePage.vue';
+import PostCard from './PostCard.vue';
 import PostHeader from './PostHeader.vue';
 export default {
     components: {
-        PostCreatePage,
+        PostCard,
         PostHeader,
     },
 };

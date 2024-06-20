@@ -24,6 +24,7 @@ const routes = [
         path: '/auth/:providerName',
         component: WaitingPage,
     },
+
     {
         path: '/post',
         component: PostMainPage,
