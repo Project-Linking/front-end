@@ -68,14 +68,68 @@
                 </v-row>
             </v-card>
         </v-row>
+        <!-- 팝업 -->
+        <v-overlay v-model="overlay" absolute class="d-flex align-center justify-center">
+            <v-card width="90%" height="90%" class="ma-auto">
+                <v-row width="100%" height="100%" class="d-flex flex-nowrap ma-auto">
+                    <v-col cols="auto">
+                        <v-card-title class="d-flex justify-start">Hello World</v-card-title>
+                        <v-card-subtitle class="d-flex align-center justify-start mb-5">
+                            <v-chip>유저닉네임</v-chip>
+                            <v-divider vertical class="mx-2"></v-divider>
+                            2024.06.24
+                        </v-card-subtitle>
+                        <!-- 자세한 정보 -->
+                        <PostInfoDetailVue />
+                        <!-- 자세한 정보 -->
+                    </v-col>
+                    <v-col>
+                        <v-divider vertical color="info"> </v-divider>
+                    </v-col>
+                    <v-col cols="8">
+                        <v-card-text class="content-text text-body-2">
+                            (간단 소개 문구) Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis facilis
+                            dicta esse molestias vero hic laudantium provident nisi eos quasi iusto alias sequi, aut
+                            aliquid voluptatibus commodi! Minima, eum voluptates?
+                        </v-card-text>
+                        <v-row class="ml-2">
+                            <v-col cols="auto">
+                                <v-img
+                                    cover
+                                    :width="100"
+                                    :height="100"
+                                    src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                ></v-img>
+                            </v-col>
+                            <v-col cols="auto">
+                                <v-img
+                                    cover
+                                    :width="100"
+                                    :height="100"
+                                    src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                ></v-img>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <!-- 버튼 -->
+                    <v-col cols="1" class="d-flex justify-end align-start">
+                        <v-btn flat icon @click="closeOverlay">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-card>
+        </v-overlay>
     </v-container>
 </template>
 
 <script>
 import ProgrammingIcon from '../language/ProgrammingIcon.vue';
+import PostInfoDetailVue from './PostInfoDetail.vue';
 export default {
     components: {
         ProgrammingIcon,
+        PostInfoDetailVue,
     },
     data() {
         return {
@@ -85,6 +139,7 @@ export default {
             languages: ['Java', 'Spring', 'React', 'HTML'],
             dialog: false,
             loading: false,
+            overlay: false,
         };
     },
     methods: {
@@ -93,6 +148,7 @@ export default {
         },
         onClickPost() {
             this.$router.push('/post');
+            this.overlay = !this.overlay;
         },
         onSubmit() {
             this.loading = true;
@@ -100,6 +156,9 @@ export default {
                 this.loading = false;
                 this.dialog = false;
             }, 3000);
+        },
+        closeOverlay() {
+            this.overlay = false;
         },
     },
     watch: {
@@ -134,5 +193,11 @@ export default {
     color: #00796b; /* 해시태그 텍스트 색 */
     border-radius: 16px; /* 해시태그 모서리 둥글게 */
     margin-right: 4px; /* 해시태그 간격 */
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 </style>
