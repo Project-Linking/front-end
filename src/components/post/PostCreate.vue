@@ -55,6 +55,10 @@
             </v-col>
         </v-row>
 
+        <TextQuestion @update-text-question="updateTextQuestion" />
+
+        <RadioQuestion @update-radio-question="updateRadioQuestion" />
+
         <p class="text-h6 d-flex align-start mb-2">프로젝트에 소개란</p>
         <v-divider></v-divider>
         <!-- 제목 -->
@@ -83,11 +87,15 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
 import { VDateInput } from 'vuetify/labs/VDateInput';
+import RadioQuestion from './RadioQuestion.vue';
+import TextQuestion from './TextQuestion.vue';
 
 export default {
     components: {
         QuillEditor,
         VDateInput,
+        RadioQuestion,
+        TextQuestion,
     },
     data() {
         return {
@@ -119,6 +127,14 @@ export default {
             content: '',
             projectType: '',
             deadline: null,
+            radio: false,
+            radioQuestions: [
+                {
+                    question: '',
+                    subQuestions: [],
+                },
+            ],
+            textQuestions: [],
         };
     },
     methods: {
@@ -134,6 +150,16 @@ export default {
             console.log('Title:', this.title);
             console.log('Content:', this.content);
             console.log('Deadline:', this.deadline);
+            console.log('TextQuestion', this.textQuestions);
+        },
+        updateRadioQuestion(value) {
+            this.radioQuestions = value;
+            this.radioQuestions.forEach((question, index) => {
+                console.log(index, question.text);
+            });
+        },
+        updateTextQuestion(value) {
+            this.textQuestions = value;
         },
     },
 };
