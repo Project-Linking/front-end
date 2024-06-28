@@ -4,6 +4,7 @@ import MainHome from '@/components/MainHome.vue';
 import WaitingPage from '@/components/login/WaitingPage.vue';
 import SignupPage from '@/components/login/SignupPage.vue';
 import PostMainPage from '@/components/post/PostMainPage.vue';
+import PostCreate from '@/components/post/PostCreate.vue';
 
 const routes = [
     {
@@ -28,6 +29,10 @@ const routes = [
     {
         path: '/post',
         component: PostMainPage,
+    },
+    {
+        path: '/post/create',
+        component: PostCreate,
     },
 ];
 
