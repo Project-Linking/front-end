@@ -148,7 +148,7 @@ export default {
             this.deadline = `${dates.getFullYear()}-${dates.getMonth() + 1}-${dates.getDate()}`;
 
             try {
-                const response = await axios.post('/board', {
+                const response = await axios.post(process.env.VUE_APP_BASE_URL + '/board', {
                     boardRequest: {
                         title: this.title || 'Default Title',
                         content: this.content,

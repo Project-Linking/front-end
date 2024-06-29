@@ -1,41 +1,25 @@
 <template>
-    <v-container>
-        <v-dialog v-model="dialog" persistent max-width="290">
-            <v-card>
-                <v-card-title class="headline">로그인이 필요합니다</v-card-title>
-                <v-card-text>로그인 후 이용해주세요.</v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="goToLogin">로그인</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-    </v-container>
+    <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+            <v-card-title class="headline">로그인이 필요한 서비스입니다.</v-card-title>
+            <v-card-text> Please log in to continue. </v-card-text>
+            <v-card-actions>
+                <v-btn color="red" @click="closeDialog">Close</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            value: {
-                type: Boolean,
-                default: false,
-            },
+            dialog: true,
         };
     },
-    computed: {
-        dialog: {
-            get() {
-                return this.value;
-            },
-            set(value) {
-                this.$emit('input', value);
-            },
-        },
-    },
     methods: {
-        goToLogin() {
-            this.$router.push('/login');
+        closeDialog() {
+            this.$emit('closeDialog');
         },
     },
 };

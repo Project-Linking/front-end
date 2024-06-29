@@ -5,17 +5,17 @@
                 <v-fab v-bind="activatorProps" size="large" icon="mdi-pencil" @click="createPost"></v-fab>
             </template>
         </v-speed-dial>
-        <LoginCheckDialogVue v-model="showLoginDialog" />
+        <LoginCheckDialog v-if="showLoginDialog" @closeDialog="showLoginDialog = !showLoginDialog" />
     </v-container>
 </template>
 
 <script>
 import { useAuthStore } from '@/store/useAuthStore';
-import LoginCheckDialogVue from './LoginCheckDialog.vue';
+import LoginCheckDialog from './LoginCheckDialog.vue';
 
 export default {
     components: {
-        LoginCheckDialogVue,
+        LoginCheckDialog,
     },
     data() {
         return {
@@ -25,6 +25,7 @@ export default {
     methods: {
         createPost() {
             const authStore = useAuthStore();
+
             if (authStore.$state.accessToken) {
                 this.$router.push('/post/create');
             } else {
