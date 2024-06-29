@@ -89,6 +89,7 @@ import 'quill/dist/quill.bubble.css';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import RadioQuestion from './RadioQuestion.vue';
 import TextQuestion from './TextQuestion.vue';
+import axios from 'axios';
 
 export default {
     components: {
@@ -141,16 +142,23 @@ export default {
         onEditorChange: debounce(function (val) {
             this.content = val.html;
         }, 466),
-        savePost() {
+        async savePost() {
             // 날짜 파싱
             const dates = this.deadline;
             this.deadline = `${dates.getFullYear()}-${dates.getMonth() + 1}-${dates.getDate()}`;
 
-            console.log('PeojectType:', this.projectType);
-            console.log('Title:', this.title);
-            console.log('Content:', this.content);
-            console.log('Deadline:', this.deadline);
-            console.log('TextQuestion', this.textQuestions);
+            try {
+                const response = await axios.post('/board', {
+                    boardRequest: {
+                        title: this.title || 'Default Title',
+                        content: this.content,
+                        deadline: this.deadline,
+                    },
+                });
+                console.log(response);
+            } catch (error) {
+                console.error('Error saving post:', error);
+            }
         },
         updateRadioQuestion(value) {
             this.radioQuestions = value;
