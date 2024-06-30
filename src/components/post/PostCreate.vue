@@ -89,7 +89,7 @@ import 'quill/dist/quill.bubble.css';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import RadioQuestion from './RadioQuestion.vue';
 import TextQuestion from './TextQuestion.vue';
-import axios from 'axios';
+import axios from '@/api/authHttp'; // 인터셉터 활성 axios 적용
 
 export default {
     components: {
@@ -143,21 +143,24 @@ export default {
             this.content = val.html;
         }, 466),
         async savePost() {
-            // 날짜 파싱
-            const dates = this.deadline;
-            this.deadline = `${dates.getFullYear()}-${dates.getMonth() + 1}-${dates.getDate()}`;
-
             try {
-                const response = await axios.post(process.env.VUE_APP_BASE_URL + '/board', {
-                    boardRequest: {
-                        title: this.title || 'Default Title',
-                        content: this.content,
-                        deadline: this.deadline,
-                    },
-                });
-                console.log(response);
+                // 날짜가 유효한지 확인하고, ISO 8601 형식으로 변환
+                const formattedDeadline = new Date(this.deadline).toISOString();
+
+                // 요청 데이터 확인
+                const requestData = {
+                    title: this.title,
+                    content: this.content,
+                    deadline: formattedDeadline,
+                };
+
+                console.log('Request Data:', requestData);
+
+                const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/board`, requestData);
+
+                console.log('Response:', response);
             } catch (error) {
-                console.error('Error saving post:', error);
+                console.error('Error saving post:', error.response.data);
             }
         },
         updateRadioQuestion(value) {
