@@ -2,12 +2,10 @@
     <v-container @click="onClickPost" height="100vh" class="clickable-container my-5">
         <v-row>
             <v-card class="mx-auto" width="100%" height="100%">
-                <div class="d-flex justify-start ma-3 ml-5">백엔드 개발자를 구합니다</div>
+                <div class="d-flex justify-start ma-3 ml-5">{{ post.title }}</div>
 
                 <div class="text-start content-text text-body-2 ma-2 ml-5">
-                    (간단 소개 문구) Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis facilis dicta
-                    esse molestias vero hic laudantium provident nisi eos quasi iusto alias sequi, aut aliquid
-                    voluptatibus commodi! Minima, eum voluptates?
+                    <span class="text-grey">마감일 <span class="line"></span>{{ post.deadLine }}</span>
                 </div>
 
                 <v-row class="d-flex align-start ma-1 ml-5">
@@ -23,7 +21,7 @@
                         <v-chip variant="text" outlined>{{ views }}</v-chip>
                         <!-- 댓글수 -->
                         <v-icon size="small">mdi-comment-outline</v-icon>
-                        <v-chip variant="text" outlined>{{ comment }}</v-chip>
+                        <v-chip variant="text" outlined>{{ post.commentNum }}</v-chip>
                     </v-col>
                     <v-col cols="auto">
                         <!-- 즐겨찾기 -->
@@ -69,76 +67,23 @@
             </v-card>
         </v-row>
         <!-- 팝업 -->
-        <v-overlay v-model="overlay" class="d-flex align-center justify-center">
-            <v-card width="90%" height="90%" class="ma-auto">
-                <v-row width="100%" height="100%" class="d-flex flex-nowrap ma-auto">
-                    <v-col cols="auto">
-                        <v-card-title class="d-flex justify-start">Hello World</v-card-title>
-                        <v-card-subtitle class="d-flex align-center justify-start mb-5">
-                            <v-chip>유저닉네임</v-chip>
-                            <v-divider vertical class="mx-2" color="info"></v-divider>
-                            <span>2024.06.24</span>
-                        </v-card-subtitle>
-                        <!-- 자세한 정보 -->
-                        <PostInfoDetailVue />
-                        <!-- 자세한 정보 -->
-                    </v-col>
-                    <v-col>
-                        <v-divider vertical color="info"> </v-divider>
-                    </v-col>
-                    <v-col cols="8">
-                        <v-card-text class="text-body-2">
-                            (간단 소개 문구) Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis facilis
-                            dicta esse molestias vero hic laudantium provident nisi eos quasi iusto alias sequi, aut
-                            aliquid voluptatibus commodi! Minima, eum voluptates? (간단 소개 문구) Lorem ipsum dolor sit
-                            amet consectetur adipisicing elit. Officiis facilis dicta esse molestias vero hic laudantium
-                            provident nisi eos quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
-                            voluptates? (간단 소개 문구) Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Officiis facilis dicta esse molestias vero hic laudantium provident nisi eos quasi iusto
-                            alias sequi, aut aliquid voluptatibus commodi! Minima, eum voluptates? (간단 소개 문구)
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis facilis dicta esse
-                            molestias vero hic laudantium provident nisi eos quasi iusto alias sequi, aut aliquid
-                            voluptatibus commodi! Minima, eum voluptates?
-                        </v-card-text>
-                        <v-row class="ml-2 mt-5">
-                            <!-- 이미지 -->
-                            <v-col cols="auto">
-                                <v-img
-                                    cover
-                                    :width="200"
-                                    :height="200"
-                                    src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-                                ></v-img>
-                            </v-col>
-                            <v-col cols="auto">
-                                <v-img
-                                    cover
-                                    :width="100"
-                                    :height="100"
-                                    src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-                                ></v-img>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <!-- 버튼 -->
-                    <v-col cols="auto" class="d-flex justify-end align-start">
-                        <v-btn flat icon @click="closeOverlay">
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </v-card>
-        </v-overlay>
+        <PostCardPopup v-if="overlay" :showOverlay="overlay" @closeOverlay="closeOverlay" />
     </v-container>
 </template>
 
 <script>
 import ProgrammingIcon from '../language/ProgrammingIcon.vue';
-import PostInfoDetailVue from './PostInfoDetail.vue';
+import PostCardPopup from './PostCardPopup.vue';
 export default {
+    props: {
+        post: {
+            type: Object,
+            requeired: true,
+        },
+    },
     components: {
         ProgrammingIcon,
-        PostInfoDetailVue,
+        PostCardPopup,
     },
     data() {
         return {
@@ -156,8 +101,7 @@ export default {
             this.isFavorite = !this.isFavorite;
         },
         onClickPost() {
-            this.$router.push('/post');
-            this.overlay = !this.overlay;
+            this.overlay = true;
         },
         onSubmit() {
             this.loading = true;
@@ -173,7 +117,7 @@ export default {
     watch: {
         dialog(val) {
             if (!val) {
-                this.loading = false; // Reset loading when dialog closes
+                this.loading = false;
             }
         },
     },
@@ -181,6 +125,11 @@ export default {
 </script>
 
 <style>
+.line {
+    border-left: 1px solid rgba(154, 154, 154, 0.284);
+    height: 300px;
+    margin-right: 3px;
+}
 .clickable-container {
     cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능함을 시각적으로 표현 */
     transition: box-shadow 0.3s ease; /* 부드러운 호버 효과를 위한 트랜지션 */

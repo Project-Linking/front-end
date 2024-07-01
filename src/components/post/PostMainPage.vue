@@ -4,7 +4,7 @@
 
         <PostHeader />
 
-        <PostCard v-for="i in 10" :key="i" @click="postDetail" />
+        <PostCard v-for="post in posts" :key="post.id" :post="post" @click="postDetail(post.id)" />
     </v-container>
 </template>
 
@@ -12,6 +12,7 @@
 import PostCard from './PostCard.vue';
 import PostHeader from './PostHeader.vue';
 import QuickWriteDialog from './QuickWriteDialog.vue';
+import axios from '@/api/authHttp';
 
 export default {
     components: {
@@ -19,11 +20,26 @@ export default {
         PostHeader,
         QuickWriteDialog,
     },
+    data() {
+        return {
+            posts: [],
+        };
+    },
     methods: {
-        postDetail(val) {
-            console.log(val);
-            console.log('click');
+        postDetail(postId) {
+            console.log(postId);
         },
+        async fetchPosts() {
+            try {
+                const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/board`);
+                this.posts = response.data;
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        },
+    },
+    mounted() {
+        this.fetchPosts();
     },
 };
 </script>
