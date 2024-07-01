@@ -10,7 +10,7 @@
                     v-model="projectType"
                     flat
                     width="80%"
-                    placeholder="선택하세요"
+                    placeholder="프로젝트"
                     :items="['프로젝트', '스터디']"
                     variant="solo-filled"
                 ></v-select>
@@ -22,7 +22,6 @@
                     v-model="deadline"
                     locale="ko"
                     flat
-                    width="80%"
                     clear-icon
                     variant="solo-filled"
                     prepend-icon=""
@@ -153,12 +152,8 @@ export default {
                     content: this.content,
                     deadline: formattedDeadline,
                 };
-
-                console.log('Request Data:', requestData);
-
-                const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/board`, requestData);
-
-                console.log('Response:', response);
+                await axios.post(`${process.env.VUE_APP_BASE_URL}/board`, requestData);
+                this.$router.push('/post');
             } catch (error) {
                 console.error('Error saving post:', error.response.data);
             }
